@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Historial - {{ paciente.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Historial clínico de {{ paciente.nombre }}</h2>
+    <p><strong>N° Historia:</strong> {{ paciente.nro_historia }} | <strong>Cédula:</strong> {{ paciente.cedula }}</p>
+
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <a href="{{ url_for('pacientes') }}" class="btn btn-outline-secondary">← Volver</a>
+        <a href="#" onclick="window.print()" class="btn btn-outline-primary">🖨️ Imprimir</a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">Agregar nueva entrada</div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('agregar_entrada', paciente_id=paciente.id) }}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea name="descripcion" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="archivo" class="form-label">Adjuntar archivo (opcional)</label>
+                    <input type="file" name="archivo" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success">💾 Guardar entrada</button>
+            </form>
+        </div>
+    </div>
+
+    <h4 class="mb-3">Entradas anteriores</h4>
+    {% if historial %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Descripción</th>
+                        <th>Archivo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entrada in historial %}
+                        <tr>
+                            <td>{{ entrada.fecha }}</td>
+                            <td>{{ entrada.descripcion }}</td>
+                            <td>
+                                {% if entrada.archivo %}
+                                    <a href="{{ url_for('static', filename='uploads/' ~ entrada.archivo) }}" target="_blank">📎 Ver archivo</a>
+                                {% else %}
+                                    <span class="text-muted">Sin archivo</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted">No hay entradas en el historial.</p>
+    {% endif %}
+</div>
+{% endblock %}

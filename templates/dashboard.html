@@ -1,9 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head><title>Dashboard</title></head>
-<body>
-  <h2>Bienvenida {{ usuario }}</h2>
-  <p>Rol: {{ rol }}</p>
-  <a href="/logout">Cerrar sesión</a>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Inicio - Neuronas Kids{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="img-fluid mb-4" style="max-height: 180px;">
+    <h2 class="mb-3">Bienvenido, {{ usuario }}</h2>
+    <p class="lead text-muted">Selecciona una opción del menú para comenzar.</p>
+    <div class="mt-4">
+        <a href="{{ url_for('pacientes') }}" class="btn btn-primary btn-lg me-2">Ver pacientes</a>
+        <a href="{{ url_for('agregar_paciente') }}" class="btn btn-outline-success btn-lg">Agregar paciente</a>
+    </div>
+</div>
+{% endblock %}
