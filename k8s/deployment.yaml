@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consultorio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consultorio
+  template:
+    metadata:
+      labels:
+        app: consultorio
+    spec:
+      containers:
+      - name: consultorio
+        image: consultorio-app:1.0
+        ports:
+        - containerPort: 8080
