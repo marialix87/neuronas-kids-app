@@ -1,3 +1,28 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: consultorio-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/data
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: consultorio-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,5 +40,37 @@ spec:
       containers:
       - name: consultorio
         image: consultorio-app:1.0
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+
+        volumeMounts:
+        # uploads persistentes
+        - name: data
+          mountPath: /app/static/uploads
+          subPath: uploads
+
+        # base de datos persistente
+        - name: data
+          mountPath: /app/neuronas.db
+          subPath: neuronas.db
+
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: consultorio-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consultorio-service
+spec:
+  type: NodePort
+  selector:
+    app: consultorio
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      nodePort: 30007
