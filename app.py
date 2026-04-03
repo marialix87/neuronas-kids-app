@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 app.secret_key = 'neuronas123'
-DB_PATH = os.path.join(os.path.dirname(__file__), 'neuronas.db')
+DB_PATH = '/app/db/neuronas.db'
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
@@ -107,8 +107,7 @@ def agregar_paciente():
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+UPLOAD_FOLDER = '/app/static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/pacientes/<int:paciente_id>')

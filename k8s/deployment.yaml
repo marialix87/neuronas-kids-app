@@ -52,8 +52,8 @@ spec:
 
         # base de datos persistente
         - name: data
-          mountPath: /app/neuronas.db
-          subPath: neuronas.db
+          mountPath: /app/db
+          subPath: db
 
       volumes:
       - name: data
